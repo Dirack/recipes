@@ -17,7 +17,6 @@
 #
 # License: GPL-3.0 <https://www.gnu.org/licenses/gpl-3.0.txt>.
 
-# Selfdoc string
 '''
 Madagascar recipe to Kirchhoff modeling
 
@@ -28,22 +27,16 @@ if __name__ == "__main__":
 	print(__doc__)
 	exit()
 
-# Madagascar package
-from rsf.proj import *
-
 __author__="Rodolfo Dirack <rodolfo_profissional@hotmail.com>"
 __version__="1.0"
 
-def arr2str(array,sep=' '):
-	'''
-	
-	Convert a tuple into a comma separeted string
-	
-	:param array: tuple to be converted
-	'''
-	return sep.join(map(str,array))
+# Madagascar Package
+from rsf.proj import *
 
-def multiLayerModel(
+# Utility functions
+from rsf.recipes.utils import arr2str
+
+def multiLayerModelBuild(
 	interfaces,
 	dipsfile,
 	modelfile,
@@ -53,7 +46,6 @@ def multiLayerModel(
 	velocities
 	):
 	'''
-
 	Generate a multi layer model to use in the program sfkirmod_newton
 
 	:out interfaces: RSF filename, interpolated interfaces file
@@ -69,23 +61,25 @@ def multiLayerModel(
 	n1 = len(layers[0])
 	n2 = len(layers)
 
-	Flow('layers.asc',None,
+	layersfile = 'layers_'+modelfile
+
+	Flow(layersfile+'.asc',None,
 	     '''
 	     echo %s
 	     n1=%d n2=%d o1=0 d1=%g
 	     data_format=ascii_float in=$TARGET
 	     ''' % (' '.join(map(arr2str,layers)),n1,n2,xmax/(n1-1)))
-	Flow('layers','layers.asc','dd form=native')
+	Flow(layersfile,layersfile+'.asc','dd form=native')
 
 	d = 0.0101 # non-round for reproducibility
 
-	Flow(interfaces,'layers',
+	Flow(interfaces,layersfile,
 	     'spline o1=0 d1=%g n1=%d' % (d,int(1.5+xmax/d)))
 	Flow(dipsfile,interfaces,'deriv scale=y')
 
 	Flow(modelfile,interfaces,
 	     '''
-	     unif2 d1=%g n1=%d v00=%s
+	     unif2 d1=%g n1=%d v00=%s | put label1=Depth unit1=km label2=Distance unit2=km
 	     ''' % (d,int(1.5+zmax/d),vstr))
 
 def kirchhoffNewtonModeling(
@@ -127,3 +121,4 @@ def kirchhoffNewtonModeling(
 		put label3="CMP" unit3="Km" label2="Offset" unit2="Km" label1=Time unit1=s
 		''' % (nt,dt,ns,ds,nh,dh,vstr))
  
+
