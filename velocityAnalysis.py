@@ -6,7 +6,7 @@
 # Purpose: Madagascar recipe to do velocity analysis, NMO
 # correction and stack.
 # 
-# Site: https://dirack.github.io
+# Site: https://www.geofisicando.com
 # 
 # Version 1.0
 # 
@@ -19,7 +19,6 @@
 from rsf.proj import *
 import math
 
-# Selfdoc string
 '''
 Madagascar recipe to do velocity analysis with automatic velocity scan and picking
 

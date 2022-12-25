@@ -7,7 +7,7 @@
 # 
 # Important!: It should be called from a SConstruct 
 #
-# Site: http://www.dirackslounge.online
+# Site: https://www.geofisicando.com
 # 
 # Version 1.0
 #
