@@ -53,7 +53,23 @@ def modeling(modelfile,
         nh,
         dh):
     '''
-    TODO
+
+    This is a wrapper function to multiLayerModelBuild function that builds the layers velocity model
+    and to the kirchhoffNewtonModeling that generates the seismic data cube applying the Kirchhoff
+    modeling to the velocity model built
+
+    :param modelfile: RSF filename, velocity model
+    :param dataCube: RSF filename, seismic data cube
+    :param xmax: interger, max x axis model distance
+    :param zmax: interger, max z axis model depth
+    :param layers: tuple array, points describing interfaces
+    :param velocities: tuple, layers velocities in km/s
+    :param nt: integer, number of time samples
+    :param dt: float, time sampling
+    :param ns: integer, number of CMP samples
+    :param ds: float, CMP sampling
+    :param nh: integer, number of offset samples
+    :param dh: float, offset sampling
     '''
     multiLayerModelBuild(
         interfaces=modelfile+'-interfaces',
@@ -89,7 +105,26 @@ def interpolation(dataCube,
         rect1,
         rect2):
     '''
-    TODO
+    
+    PEF interpolation to increase number of CMPs
+    Interpolation is done twice, so interpolated1 is the intermediate interpolated
+    data cube that is interpolated again to generate interpolated2 data cube
+
+    This is just a wrapper function to apply the pefInterpolation function two times
+    and increase the number of CMPs in seismic data cube by four times
+
+    :param dataCube: RSF filename, seismic data cube
+    :param interpolated1: RSF filename, intermediate interpolated data cube
+    :param interpolated2: RSF filename, interpolated data cube
+    :param nm: int, Number of CMPs in seismic data cube
+    :param dm: float, CMPs sampling in seismic data cube
+    :param nt: int, Number of time samples in seismic data cube
+    :param dt: float, time sampling in seismic data cube
+    :param nhi: int, Number of offsets to interpolated
+    :param a1: integer, Number of PEF coeficients in time axis
+    :param a2: integer, Number of PEF coeficients in space axis
+    :param rect1: integer, Smooth radius in time
+    :param rect2: integer, Smooth radius in space
     '''
     pefInterpolation(dataCube=dataCube,
     interpolated=interpolated1,
